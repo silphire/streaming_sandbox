@@ -8,7 +8,12 @@ import (
 )
 
 func main() {
-	file, err := os.Open("test.mp4")
+	if len(os.Args) <= 1 {
+		fmt.Printf("Not specified input file\n")
+		os.Exit(1)
+	}
+
+	file, err := os.Open(os.Args[1])
 	if err != nil {
 		fmt.Printf("Cannot open file -- %s", err.Error())
 		os.Exit(1)
