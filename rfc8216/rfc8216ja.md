@@ -18,18 +18,40 @@ This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relatin
 
 This document may not be modified, and derivative works of it may not be created, except to format it for publication as an RFC or to translate it into languages other than English.
 
-# 1. HTTP Live Streamingとは
+# 1. HTTP Live Streaming とは
 
 HTTP Live Streamingは、信頼性があり、かつ低コストに連続した長時間の動画をインターネットを通じて配信する手段である。HLSは受信者に、その時点で可能な最も良い品質で途切れのない再生を維持するために、現在のネットワークの状態に応じて適切なビットレートのメディアを利用することを可能にする。
+It supports interstitial content boundaries.
+また、柔軟なメディア暗号化のフレームワークを提供する。
+また、音声翻訳のような、同一のコンテンツの複数種類の演出を効率的に提供できる。
+また、数多くの視聴者への配信を行うための巨大規模のHTTPキャッシュインフラとの互換性を提供している。
 
 2009年にこのInternet-Draftが初めて投稿されてから、HTTPライブストリーミングは幅広いコンテンツ制作者、ツール業者、配信者、デバイス製造メーカーによって実装され運用されてきた。初投稿以降の8年間のうちに、メディアストリーミングの実装者による広範囲に渡るレビューや議論を通じて、本プロトコルは改良を受けてきた。
+
+本文書の目的は、メディア転送プロトコルを記述することによってHTTPライブストリーミングの実装者間で相互運用性を促進することにある。本プロトコルを使うことによって、クライアントはサーバーからメディアの連続したストリームを受信することができる。
 
 本文書は本プロトコルのバージョン7について記述している。
 
 # 2. 概観
 
-マルチメディア表現はUniform Resource Identifier (URI) [RFC3986](http://tools.ietf.org/html/rfc3986) によってプレイリストに定義される。
+マルチメディア表現は Uniform Resource Identifier (URI) [RFC3986](http://tools.ietf.org/html/rfc3986) によってプレイリストに定義される。
 
 プレイリストはメディアプレイリストかマスタープレイリストのいずれかである。どちらともUTF-8テキストファイルであり、URIと詳細タグを含んでいる。
 
 メディアプレイリストは、メディアセグメントのどれが、いつ続けて再生されるかを記したリストが記載されており、マルチメディアの表現として再生される。
+
+以下はメディアプレイリストの一例である。
+
+```
+#EXTM3U
+#EXT-X-TARGETDURATION:10
+
+#EXTINF:9.009,
+http://media.example.com/first.ts
+#EXTINF:9.009,
+http://media.example.com/second.ts
+#EXTINF:3.003,
+http://media.example.com/third.ts
+```
+
+最初の行は #EXTM3U というフォーマット識別タグである。 #EXT-X-TARGETDURATION が含まれている
